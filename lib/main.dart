@@ -12,12 +12,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      // debugShowCheckedModeBanner: false,
       // debugShowMaterialGrid: true,
       // showSemanticsDebugger: true,
       title: 'Tic Tac Toe',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        colorSchemeSeed: Colors.blue,
       ),
       home: const MyHomePage(),
     );

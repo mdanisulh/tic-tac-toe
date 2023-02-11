@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'cross.dart';
@@ -29,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
     [0, 4, 8],
     [2, 4, 6],
   ];
+  int ai = 0;
   @override
   Widget build(BuildContext context) {
     if (boxesFilled == 9 && winner == "") {
@@ -36,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
       userIsCross = !userIsCross;
     }
     userIsCross = !userIsCross;
+    if (ai == 1) easyAI();
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -76,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.indigo.withOpacity(0.7),
                           fontStyle: FontStyle.italic,
                           decoration: TextDecoration.underline,
+                          decorationColor: Colors.indigo.withOpacity(0.7),
                           decorationStyle: TextDecorationStyle.double,
                           decorationThickness: .6,
                         ),
@@ -113,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.red.withOpacity(0.6),
                             fontSize: 70,
                             fontWeight: FontWeight.bold,
+                            decorationColor: Colors.red.withOpacity(0.6),
                             decoration: TextDecoration.underline,
                           ),
                         ),
@@ -123,6 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.blue.withOpacity(0.6),
                             fontSize: 70,
                             fontWeight: FontWeight.bold,
+                            decorationColor: Colors.blue.withOpacity(0.6),
                             decoration: TextDecoration.underline,
                           ),
                         ),
@@ -170,6 +177,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                     fontStyle: FontStyle.italic,
                     decoration: TextDecoration.underline,
+                    decorationColor: winner == "Draw!"
+                        ? Colors.purple.withOpacity(0.6)
+                        : !userIsCross
+                            ? Colors.blue.withOpacity(0.6)
+                            : Colors.red.withOpacity(0.6),
                     decorationThickness: 2,
                   ),
                 ),
@@ -183,7 +195,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3),
+                            crossAxisCount: 3,
+                          ),
                           itemCount: 9,
                           itemBuilder: ((context, index) {
                             return InkWell(
@@ -231,43 +244,88 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 FittedBox(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      reset();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo.withOpacity(0.7),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(75),
-                          bottomRight: Radius.circular(25),
-                          bottomLeft: Radius.circular(25),
-                          topRight: Radius.circular(75),
-                        ),
-                      ),
-                    ),
-                    child: SizedBox(
-                      width: 130,
-                      child: FittedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              " Play Again ",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black.withOpacity(0.75),
-                              ),
+                  child: Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          reset();
+                          ai = 0;
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.indigo.withOpacity(0.7),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(75),
+                              bottomRight: Radius.circular(25),
+                              bottomLeft: Radius.circular(25),
+                              topRight: Radius.circular(75),
                             ),
-                            Icon(
-                              Icons.replay,
-                              color: Colors.black.withOpacity(0.75),
-                            )
-                          ],
+                          ),
+                        ),
+                        child: SizedBox(
+                          width: 130,
+                          child: FittedBox(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  " Play with friend ",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black.withOpacity(0.75),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.replay,
+                                  color: Colors.black.withOpacity(0.75),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          reset();
+                          ai = 1;
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.indigo.withOpacity(0.7),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(75),
+                              bottomRight: Radius.circular(25),
+                              bottomLeft: Radius.circular(25),
+                              topRight: Radius.circular(75),
+                            ),
+                          ),
+                        ),
+                        child: SizedBox(
+                          width: 130,
+                          child: FittedBox(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  " Play with AI ",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black.withOpacity(0.75),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.replay,
+                                  color: Colors.black.withOpacity(0.75),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 )
               ],
@@ -276,6 +334,34 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void easyAI() {
+    if (!userIsCross && boxesFilled != 9) {
+      int random;
+      do {
+        random = Random().nextInt(9);
+      } while (symbol[random] != null);
+      symbol[random] = userIsCross;
+      setState(() {
+        boxesFilled++;
+        if (check()) {
+          if (userIsCross) {
+            winner = "X Wins!";
+            player1++;
+          } else {
+            winner = "O Wins!";
+            player2++;
+          }
+          userIsCross = !userIsCross;
+        }
+        if (boxesFilled == 9 && winner == "") {
+          winner = "Draw!";
+          userIsCross = !userIsCross;
+        }
+        userIsCross = !userIsCross;
+      });
+    }
   }
 
   void reset() {
