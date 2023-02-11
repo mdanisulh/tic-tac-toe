@@ -39,8 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
       userIsCross = !userIsCross;
     }
     userIsCross = !userIsCross;
-    if (ai == 1) easyAI();
-    if (ai == 2) mediumAI();
+    if (ai != 0) singlePlayer();
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -254,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 FittedBox(
-                  //Play
+                  //Play Again
                   child: Column(
                     children: [
                       Row(
@@ -345,45 +344,92 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      ElevatedButton(
-                        //Single Player Medium
-                        onPressed: () {
-                          reset();
-                          ai = 2;
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigo.withOpacity(0.7),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(75),
-                              bottomRight: Radius.circular(25),
-                              bottomLeft: Radius.circular(25),
-                              topRight: Radius.circular(75),
-                            ),
-                          ),
-                        ),
-                        child: SizedBox(
-                          width: 130,
-                          child: FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  " Play with AI (Medium) ",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black.withOpacity(0.75),
-                                  ),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            //Single Player Medium
+                            onPressed: () {
+                              reset();
+                              ai = 2;
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.indigo.withOpacity(0.7),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(75),
+                                  bottomRight: Radius.circular(25),
+                                  bottomLeft: Radius.circular(25),
+                                  topRight: Radius.circular(75),
                                 ),
-                                Icon(
-                                  Icons.replay,
-                                  color: Colors.black.withOpacity(0.75),
-                                )
-                              ],
+                              ),
+                            ),
+                            child: SizedBox(
+                              width: 130,
+                              child: FittedBox(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      " Play with AI (Medium) ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black.withOpacity(0.75),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.replay,
+                                      color: Colors.black.withOpacity(0.75),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            //Single Player Hard
+                            onPressed: () {
+                              reset();
+                              ai = 3;
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.indigo.withOpacity(0.7),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(75),
+                                  bottomRight: Radius.circular(25),
+                                  bottomLeft: Radius.circular(25),
+                                  topRight: Radius.circular(75),
+                                ),
+                              ),
+                            ),
+                            child: SizedBox(
+                              width: 130,
+                              child: FittedBox(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      " Play with AI (Hard) ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black.withOpacity(0.75),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.replay,
+                                      color: Colors.black.withOpacity(0.75),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -396,38 +442,36 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void easyAI() {
+  void singlePlayer() {
     if (!userIsCross && boxesFilled != 9) {
-      int random;
-      do {
-        random = Random().nextInt(9);
-      } while (symbol[random] != null);
-      symbol[random] = userIsCross;
-      setAI();
-    }
-  }
-
-  void mediumAI() {
-    if (!userIsCross && boxesFilled != 9) {
-      for (int i = 0; i < 9; i++) {
-        if (symbol[i] == null) {
-          symbol[i] = userIsCross;
-          if (check() == userIsCross) {
-            setAI();
-            return;
+      if (ai == 2 || ai == 3) {
+        for (int i = 0; i < 9; i++) {
+          if (symbol[i] == null) {
+            symbol[i] = userIsCross;
+            if (check() == userIsCross) {
+              setAI();
+              return;
+            }
+            symbol[i] = null;
           }
-          symbol[i] = null;
+        }
+        for (int i = 0; i < 9; i++) {
+          if (symbol[i] == null) {
+            symbol[i] = !userIsCross;
+            if (check() == !userIsCross) {
+              symbol[i] = userIsCross;
+              setAI();
+              return;
+            }
+            symbol[i] = null;
+          }
         }
       }
-      for (int i = 0; i < 9; i++) {
-        if (symbol[i] == null) {
-          symbol[i] = !userIsCross;
-          if (check() == !userIsCross) {
-            symbol[i] = userIsCross;
-            setAI();
-            return;
-          }
-          symbol[i] = null;
+      if (ai == 3) {
+        if (symbol[4] == null) {
+          symbol[4] = userIsCross;
+          setAI();
+          return;
         }
       }
       int random;
